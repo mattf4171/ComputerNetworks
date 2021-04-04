@@ -9,13 +9,14 @@ Created on Sun Apr  4 16:27:09 2021
 from socket import *
 import threading
 ​
+
 i = 0
-sentences = []
+sentences = [] # will append the messages in the empty array then dispay them in the order they were received
 ​
 def catch_msg(socket, name):
-	global i, sentences
+	global i, sentences 
 	sentences.append(socket.recv(1024).decode())
-	msg = name + " Sent message: " + sentences[i]
+	msg = name + " Sent message: " + sentences[i] # format for each client program running
 	print(msg)
 	i += 1
 ​
@@ -24,15 +25,15 @@ def catch_msg(socket, name):
 serverPort = 12000
 serverSocket = socket(AF_INET, SOCK_STREAM)
 serverSocket.bind(("",serverPort))
-serverSocket.listen(2)
+serverSocket.listen(2) # listen for 2 client connections
 print("The server is ready to receive")
 ​
 while True:
-	connectionSocketX,addrX = serverSocket.accept()
+	connectionSocketX,addrX = serverSocket.accept() # First connection
 	print("Accepted first connection, calling it connection X")
 	connectionSocketX.send("Client X connected".encode())
 	
-	connectionSocketY,addrY = serverSocket.accept()
+	connectionSocketY,addrY = serverSocket.accept() # Second connection
 	print("Accepted second connection, calling it connection Y")
 	connectionSocketY.send("Client Y connected".encode())
 ​
@@ -49,5 +50,5 @@ while True:
 	connectionSocketX.send(msg.encode())
 	connectionSocketY.send(msg.encode())	
 ​
-	connectionSocketX.close()
+	connectionSocketX.close() # free up the ports since we no longer need them
 	connectionSocketY.close()
